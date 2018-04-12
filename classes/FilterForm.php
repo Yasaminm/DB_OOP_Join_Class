@@ -8,7 +8,7 @@ class FilterForm {
   
  }
 
- public function setFilter(string $field, int $filter, $column = false) {
+ public function setFilter(string $field, $filter, $column = false) {
   $c = (!$column) ? $field : $column;
   $this->scheme[] = [
       'fieldname' => $field,
@@ -24,7 +24,11 @@ class FilterForm {
  public function filter($method) {
   $data = [];
   foreach ($this->scheme as $item) {
+      if(is_array($item['filter'])){
+          $val = filter_input($method, $item['fieldname'], $item['filter'][0], $item['filter'][1]);
+      }else {
    $val = filter_input($method, $item['fieldname'], $item['filter']);
+      }
    if ($val !== false && $val !== NULL) {
     $data[$item['columname']] = $val;
    }
